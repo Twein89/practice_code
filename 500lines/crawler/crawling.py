@@ -20,4 +20,13 @@ class Crawler:
         self.session = aiohttp.ClientSession(loop=loop)
         self.q.put((root_url, self.max_redirect))
 
-    
+    @asyncio.coroutine
+    def crawl(self):
+        """Run the crawler until all work is done"""
+        workers = [asyncio.Task(self.work())
+                   for _ in range(self.max_tasks)]
+
+        # When all work is done, exit
+        yield from self.q.join()
+        for w in workers:
+            w.cancel()
