@@ -1,11 +1,16 @@
 import click
 
 @click.command()
-@click.argument('src', nargs=-1)
-@click.argument('dst', nargs=1)
-def copy(src, dst):
-    print(src)
-    for fn in src:
-        click.echo('move %s to folder %s' % (fn, dst))
+@click.argument('input', type=click.File('rb'))
+@click.argument('output', type=click.File('wb'))
+def inout(input, output):
 
-copy()
+    while True:
+        chunk = input.read(1024)
+        print(chunk)
+        if not chunk:
+            break
+        output.write(chunk)
+
+if __name__ == '__main__':
+    inout()
