@@ -1,22 +1,15 @@
-def scope_test():
-    def do_local():
-        spam = "local spam"
+def countdown(n):
+    print('Starting to count from', n)
+    while n > 0:
+        yield n
+        n -= 1
+    print('Done!')
 
-    def do_nonlocal():
-        nonlocal spam
-        spam = "nonlocal spam"
+c = countdown(3)
+print(next(c))
 
-    def do_global():
-        global spam
-        spam = "global spam"
+print(next(c))
 
-    spam = "test spam"
-    do_local()
-    print("After local assignment:", spam)
-    do_nonlocal()
-    print("After nonlocal assignment:", spam)
-    do_global()
-    print("After global assignmetn:", spam)
+print(next(c))
 
-scope_test()
-print("In global scope:", spam)
+print(next(c))
