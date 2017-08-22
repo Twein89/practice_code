@@ -33,6 +33,20 @@ def make_handler():
         print('[{}] Got: {}'.format(sequence, result))
     return handler
 
+# handler = make_handler()
+# apply_async(add, (2, 3), callback=handler)
+# apply_async(add, ('hello', 'world'), callback=handler)
+
+# 协程
+def make_handler():
+    sequence = 0
+    while True:
+        result = yield
+        sequence += 1
+        print('[{}] Got: {}'.format(sequence, result))
+
+# 协程使用send()方法作为回调函数
 handler = make_handler()
-apply_async(add, (2, 3), callback=handler)
-apply_async(add, ('hello', 'world'), callback=handler)
+next(handler)
+apply_async(add, (2, 3), callback=handler.send)
+apply_async(add, ('hello', 'world'), callback=handler.send)
