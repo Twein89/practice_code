@@ -1,31 +1,38 @@
-class Node:
-    def __init__(self, value):
-        self._value = value
-        self._children = []
+def apply_async(func, args, *, callback):
+    result = func(*args)
+    callback(result)
 
-    def __repr__(self):
-        return 'Node({!r})'.format(self._value)
+def print_result(result):
+    print('Got:', result)
 
-    def add_child(self, node):
-        self._children.append(node)
+def add(x, y):
+    return x + y
 
-    def __iter__(self):
-        return iter(self._children)
+# apply_async(add, (2, 3), callback=print_result)
+#
+# apply_async(add, ('hello', 'world'), callback=print_result)
 
-    def depth_first(self):
-        yield self
-        for c in self:
-            yield from c.depth_first()
+class ResultHandler:
 
-if __name__ == '__main__':
-    root = Node(0)
-    child1 = Node(1)
-    child2 = Node(2)
-    root.add_child(child1)
-    root.add_child(child2)
-    child1.add_child(Node(3))
-    child1.add_child(Node(4))
-    child2.add_child(Node(5))
+    def __init__(self):
+        self.sequence = 0
 
-    for ch in root.depth_first():
-        print(ch)
+    def handler(self, result):
+        self.sequence += 1
+        print('[{}] Got: {}'.format(self.sequence, result))
+
+# r = ResultHandler()
+# apply_async(add, (2, 3), callback=r.handler)
+# apply_async(add, ('hello', 'world'), callback=r.handler)
+
+def make_handler():
+    sequence = 0
+    def handler(result):
+        nonlocal sequence
+        sequence += 1
+        print('[{}] Got: {}'.format(sequence, result))
+    return handler
+
+handler = make_handler()
+apply_async(add, (2, 3), callback=handler)
+apply_async(add, ('hello', 'world'), callback=handler)
