@@ -39,10 +39,9 @@ def test():
         print(r)
     print('Goodbye')
 
-# test()
 if __name__ == '__main__':
-    import multiprocessing
-    pool = multiprocessing.Pool()
-    apply_async = pool.apply_async
+    # import multiprocessing
+    # pool = multiprocessing.Pool()
+    # apply_async = pool.apply_async
 
     test()
