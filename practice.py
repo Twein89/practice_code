@@ -1,21 +1,59 @@
-class Base:
-    def __init__(self):
-        print('Base.__init__')
+# class Person:
+#     def __init__(self, name):
+#         self.name = name
+#
+#     @property
+#     def name(self):
+#         return self._name
+#
+#     @name.setter
+#     def name(self, value):
+#         if not isinstance(value, str):
+#             raise TypeError('Expected a string')
+#         self._name = value
+#
+#     @name.deleter
+#     def name(self):
+#         raise AttributeError("Can't delete attribute")
 
-class A(Base):
-    def __init__(self):
-        Base.__init__(self)
-        print('A.__init__')
+class String:
+    def __init__(self, name):
+        self.name = name
 
-class B(Base):
-    def __init__(self):
-        Base.__init__(self)
-        print('A.__init__')
+    def __get__(self, instance, cls):
+        if instance is None:
+            return self
+        return instance.__dict__[self.name]
 
-class C(A, B):
-    def __init__(self):
-        A.__init__(self)
-        B.__init__(self)
-        print('C.__init__')
+    def __set__(self, instance, value):
+        if not isinstance(value, str):
+            raise TypeError('Expected a string')
+        instance.__dict__[self.name] = value
 
-c = C()
+class Person:
+    name = String('name')
+
+    def __init__(self, name):
+        self.name = name
+
+class SubPerson(Person):
+    @property
+    def name(self):
+        print('Getting name')
+        return super().name
+
+    @name.setter
+    def name(self, value):
+        print('Setting name to', value)
+        super(SubPerson, SubPerson).name.__set__(self, value)
+
+    @name.deleter
+    def name(self):
+        print('Deleting name')
+        super(SubPerson, SbuPerson).name.__delete__(self)
+
+s = SubPerson('Guido')
+print(s.name)
+
+#s.name = 'Larry'
+#s.name = 42
