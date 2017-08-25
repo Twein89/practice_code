@@ -1,34 +1,28 @@
-import weakref
+import time
+from functools import wraps
+def timethis(func):
+    '''
+    Decorator that reports the execution time.
+    '''
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(func.__name__, end-start)
+        return result
+    return wrapper
 
-class Node:
-    def __init__(self, value):
-        self.value = value
-        self._parent = None
-        self.children = []
+@timethis
+def countdown(n: int):
+    '''
+    Counts down
+    '''
+    while n > 0:
+        n -= 1
 
-    def __repr__(self):
-        return 'Node({!r:})'.format(self.value)
-
-    @property
-    def parent(self):
-        print('----------parent: ')
-        print(self._parent)
-        return None if self._parent is None else self._parent()
-
-    @parent.setter
-    def parent(self, node):
-        print('==========node: ')
-        print(node)
-        self._parent = weakref.ref(node)
-
-    def add_child(self, child):
-        print('++++++++++++++')
-        self.children.append(child)
-        child.parent = self
-
-root = Node('parent')
-c1 = Node('child')
-root.add_child(c1)
-print(c1.parent)
-del root
-print(c1.parent)
+#countdown(1000000)
+#print(countdown.__name__)
+#print(countdown.__doc__)
+#print(countdown.__annotations__)
+print(countdown.__wrapped__)
