@@ -1,59 +1,34 @@
-# class Person:
-#     def __init__(self, name):
-#         self.name = name
-#
-#     @property
-#     def name(self):
-#         return self._name
-#
-#     @name.setter
-#     def name(self, value):
-#         if not isinstance(value, str):
-#             raise TypeError('Expected a string')
-#         self._name = value
-#
-#     @name.deleter
-#     def name(self):
-#         raise AttributeError("Can't delete attribute")
+import weakref
 
-class String:
-    def __init__(self, name):
-        self.name = name
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self._parent = None
+        self.children = []
 
-    def __get__(self, instance, cls):
-        if instance is None:
-            return self
-        return instance.__dict__[self.name]
+    def __repr__(self):
+        return 'Node({!r:})'.format(self.value)
 
-    def __set__(self, instance, value):
-        if not isinstance(value, str):
-            raise TypeError('Expected a string')
-        instance.__dict__[self.name] = value
-
-class Person:
-    name = String('name')
-
-    def __init__(self, name):
-        self.name = name
-
-class SubPerson(Person):
     @property
-    def name(self):
-        print('Getting name')
-        return super().name
+    def parent(self):
+        print('----------parent: ')
+        print(self._parent)
+        return None if self._parent is None else self._parent()
 
-    @name.setter
-    def name(self, value):
-        print('Setting name to', value)
-        super(SubPerson, SubPerson).name.__set__(self, value)
+    @parent.setter
+    def parent(self, node):
+        print('==========node: ')
+        print(node)
+        self._parent = weakref.ref(node)
 
-    @name.deleter
-    def name(self):
-        print('Deleting name')
-        super(SubPerson, SbuPerson).name.__delete__(self)
+    def add_child(self, child):
+        print('++++++++++++++')
+        self.children.append(child)
+        child.parent = self
 
-s = SubPerson('Guido')
-print(s.name)
-
-#s.name = 'Larry'
-#s.name = 42
+root = Node('parent')
+c1 = Node('child')
+root.add_child(c1)
+print(c1.parent)
+del root
+print(c1.parent)
