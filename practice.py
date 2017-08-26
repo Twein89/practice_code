@@ -1,34 +1,30 @@
-from functools import wraps
-import inspect
-
-
-def optional_debug(func):
-    if 'debug' in inspect.getargspec(func).args:
-        raise TypeError('debug argument is already defined')
-
-    @wraps(func)
-    def wrapper(*args, debug=False, **kwargs):
-        if debug:
-            print('Calling: ', func.__name__)
-        return func(*args, **kwargs)
-    sig = inspect.signature(func)
-    parms = list(sig.parameters.values())
-    parms.append(inspect.Parameter('debug',
-                                   inspect.Parameter.KEYWORD_ONLY,
-                                   default=False))
-    wrapper.__signature__ = sig.replace(parameters=parms)
-    return wrapper
-
-# @optional_debug
-# def spam(x, y, z):
-#     print(x, y, z)
+# def log_getattribute(cls):
+#     orig_getattribute = cls.__getattribute__
 #
-# spam(1, 2, 3)
-# spam(1, 2, {'a': 1, 'b': 2}, debug=True)
+#     def new_getattribute(self, name):
+#         print('getting', name)
+#         return orig_getattribute(self, name)
+#     cls.__getattribute__ = new_getattribute
+#     return cls
+#
+# @log_getattribute
+# class A:
+#     def __init__(self, x):
+#         self.x = x
+#     def spam(self):
+#         pass
 
+class LoggedGetattribute:
+    def __getattribute__(self, name):
+        print('getting', name)
+        return super().__getattribute__(name)
 
-@optional_debug
-def add(x, y):
-    return x + y
+class A(LoggedGetattribute):
+    def __init__(self, x):
+        self.x = x
+    def spam(self):
+        pass
 
-print(inspect.signature(add))
+a = A(42)
+print(a.x)
+a.spam()
