@@ -1,31 +1,42 @@
+import types
 from functools import wraps
 
-class A:
-    def decorate1(self, func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            print('decorate 1')
-            return func(*args, **kwargs)
-        return wrapper
+class Profiled:
+    def __init__(self, func):
+        wraps(func)(self)
+        self.ncalls = 0
 
-    @classmethod
-    def decorate2(cls, func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            print('decorate 2')
-            return func(*args, **kwargs)
-        return wrapper
+    def __call__(self, *args, **kwargs):
+        self.ncalls += 1
+        return self.__wrapped__(*args, **kwargs)
 
-# as an instance method
-a = A()
-@a.decorate1
-def spam():
+    def __get__(self, instance, cls):
+        if instance is None:
+            return self
+        else:
+            return types.MethodType(self, instance)
+
+@Profiled
+def add(x, y):
+    return x + y
+
+class Spam:
+    @Profiled
+    def bar(self, x):
+        print(self, x)
+
+# print(add(1, 2))
+# print(add(2, 3))
+# print(add.ncalls)
+#
+# s = Spam()
+# s.bar(1)
+# s.bar(2)
+# s.bar(3)
+# print(Spam.bar.ncalls)
+
+s = Spam()
+def grok(self, x):
     pass
 
-# as an class method
-@A.decorate2
-def grok():
-    pass
-
-spam()
-grok()
+print(grok.__get__(s, Spam))
