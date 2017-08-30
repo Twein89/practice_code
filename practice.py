@@ -1,49 +1,37 @@
-from inspect import Signature, Parameter
+from inspect import signature
+import logging
 
-def make_sig(*names):
-    parms = [Parameter(name, Parameter.POSITIONAL_OR_KEYWORD)
-            for name in names]
-    return Signature(parms)
+class MatchSignaturesMeta(type):
 
-# class Structure:
-#     __signature__ = make_sig()
-#     def __init__(self, *args, **kwargs):
-#         bound_values = self.__signature__.bind(*args, **kwargs)
-#         for name, value in bound_values.arguments.items():
-#             setattr(self, name, value)
-#
-# class Stock(Structure):
-#     __signature__ = make_sig('name', 'shares', 'price')
-#
-# class Point(Structure):
-#     __signature__ = make_sig('x', 'y')
-#
-# import inspect
-# print(inspect.signature(Stock))
-#
-# s1 = Stock('ACME', 100, 490.1)
-# # s2 = Stock('ACME', 100)
-# s3 = Stock('ACME', 100, 490.1, shares=50)
+    def __init__(self, clsname, bases, clsdict):
+        super().__init__(clsname, bases, clsdict)
+        sup = super(self, self)
+        for name, value in clsdict.items():
+            if name.startswith('_') or not callable(value):
+                continue
 
-class StructureMeta(type):
-    def __new__(cls, clsname, bases, clsdict):
-        clsdict['__signature__'] = make_sig(*clsdict.get('_fields', []))
-        return super().__new__(cls, clsname, bases, clsdict)
+            prev_dfn = getattr(sup, name, None)
+            if prev_dfn:
+                prev_sig = signature(prev_dfn)
+                val_sig = signature(value)
+                if prev_sig != val_sig:
+                    logging.warning('Signature mismatch in %s. %s != %s',
+                            value.__qualname__, prev_sig, val_sig)
 
-class Structure(metaclass=StructureMeta):
-    _fields = []
-    def __init__(self, *args, **kwargs):
-        bound_values = self.__signature__.bind(*args, **kwargs)
-        for name, value in bound_values.arguments.items():
-            setattr(self, name, value)
 
-class Stock(Structure):
-    _fields = ['name', 'shares', 'price']
+class Root(metaclass=MatchSignaturesMeta):
+    pass
 
-class Point(Structure):
-    _fields = ['x', 'y']
+class A(Root):
+    def foo(self, x, y):
+        pass
 
-import inspect
+    def spam(self, x, *, z):
+        pass
 
-print(inspect.signature(Stock))
-print(inspect.signature(Point))
+class B(A):
+    def foo(self, a, b):
+        pass
+
+    def spam(self, x, z):
+        pass
