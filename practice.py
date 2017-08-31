@@ -1,32 +1,79 @@
-from time import localtime
+class LoggedMappingMixin:
+    __slots__ = ()
 
-class Date:
-    def __init__(self, year, month, day):
-        print('init:')
-        self.year = year
-        self.month = month
-        self.day = day
+    def __getitem__(self, key):
+        print('Getting ' + str(key))
+        return super().__getitem__(key)
 
-    @classmethod
-    def today(cls):
-        print('cls method:')
-        d = cls.__new__(cls)
-        t = localtime()
-        d.year = t.tm_year
-        d.month = t.tm_mon
-        d.day = t.tm_mday
-        return d
+    def __setitem__(self, key, value):
+        print('Setting {} = {!r}'.format(key, value))
+        return super().__setitem__(key, value)
 
-    @classmethod
-    def json2date(cls, data):
-        d = cls.__new__(cls)
-        for key, value in data.items():
-            setattr(d, key, value)
-        return d
+    def __delitem__(self, key):
+        print('Deleting ' + str(key))
+        return super().__delitem__(key)
 
-a = Date.today()
-print(a.year)
+class SetOnceMappingMixin:
+    __slots__ = ()
 
-data = {'year': 2012, 'month': 1, 'day': 2}
-a = Date.json2date(data)
-print(a.day)
+    def __setitem__(self, key, value):
+        if key in self:
+            raise KeyError(str(key) + ' already set')
+        return super().__setitem__(key, value)
+
+class StringKeysMappingMixin:
+    __slots__ = ()
+
+    def __setitem__(self, key, value):
+        if not isinstance(key, str):
+            raise TypeError('keys must be strings')
+        return super().__setitem__(key, value)
+
+# class LoggedDict(LoggedMappingMixin, dict):
+#     pass
+#
+# d = LoggedDict()
+# d['x'] = 23
+# print(d['x'])
+# del d['x']
+
+from collections import defaultdict
+
+class SetOnceDefaultDict(SetOnceMappingMixin, defaultdict):
+    pass
+
+# d = SetOnceDefaultDict(list)
+# d['x'].append(2)
+# d['x'].append(3)
+# print(d['x'])
+# d['x'] = 23
+
+def LoggedMapping(cls):
+    cls_getitem = cls.__getitem__
+    cls_setitem = cls.__setitem__
+    cls_delitem = cls.__delitem__
+
+    def __getitem__(self, key):
+        print('Getting ' + str(key))
+        return cls_getitem(self, key)
+
+    def __setitem__(self, key, value):
+        print('Setting {} = {!r}'.format(key, value))
+        return cls_setitem(self, key, value)
+
+    def __delitem__(self, key):
+        print('Deleting ' + str(key))
+        return cls_delitem(self, key)
+    cls.__getitem__ = __getitem__
+    cls.__setitem__ = __setitem__
+    cls.__delitem__ = __delitem__
+    return cls
+
+@LoggedMapping
+class LoggedDict(dict):
+    pass
+
+d = LoggedDict()
+d['x'] = 23
+print(d['x'])
+del d['x']
