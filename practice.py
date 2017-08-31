@@ -1,37 +1,27 @@
-from inspect import signature
-import logging
+import operator
 
-class MatchSignaturesMeta(type):
+class StructTupleMeta(type):
+    def __init__(cls, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for n, name in enumerate(cls._fields):
+            setattr(cls, name, property(operator.itemgetter(n)))
 
-    def __init__(self, clsname, bases, clsdict):
-        super().__init__(clsname, bases, clsdict)
-        sup = super(self, self)
-        for name, value in clsdict.items():
-            if name.startswith('_') or not callable(value):
-                continue
+class StructTuple(tuple, metaclass=StructTupleMeta):
+    _fields = []
+    def __new__(cls, *args):
+        if len(args) != len(cls._fields):
+            raise ValueError('{} arguments required'.format(len(cls._fields)))
+        return super().__new__(cls, args)
 
-            prev_dfn = getattr(sup, name, None)
-            if prev_dfn:
-                prev_sig = signature(prev_dfn)
-                val_sig = signature(value)
-                if prev_sig != val_sig:
-                    logging.warning('Signature mismatch in %s. %s != %s',
-                            value.__qualname__, prev_sig, val_sig)
+class Stock(StructTuple):
+    _fields = ['name', 'shares', 'price']
 
+class Point(StructTuple):
+    _fields = ['x', 'y']
 
-class Root(metaclass=MatchSignaturesMeta):
-    pass
-
-class A(Root):
-    def foo(self, x, y):
-        pass
-
-    def spam(self, x, *, z):
-        pass
-
-class B(A):
-    def foo(self, a, b):
-        pass
-
-    def spam(self, x, z):
-        pass
+s = Stock('ACME', 50, 91.1)
+print(s)
+print(s[0])
+print(s.name)
+print(s.shares * s.price)
+s.shares = 23
