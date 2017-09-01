@@ -3,9 +3,14 @@ import types
 class Node:
     pass
 
+class Visit:
+    def __init__(self, node):
+        self.node = node
+
 class NodeVisitor:
     def visit(self, node):
-        stack = [node]
+        # stack = [node]
+        stack = [Visit(node)]
         last_result = None
         while stack:
             try:
@@ -13,8 +18,9 @@ class NodeVisitor:
                 if isinstance(last, types.GeneratorType):
                     stack.append(last.send(last_result))
                     last_result = None
-                elif isinstance(last, Node):
-                    stack.append(self._visit(stack.pop()))
+                elif isinstance(last, Visit):
+                    # stack.append(self._visit(stack.pop()))
+                    stack.append(self._visit(stack.pop().node))
                 else:
                     last_result = stack.pop()
             except StopIteration:
@@ -65,16 +71,16 @@ class Evaluator(NodeVisitor):
         return node.value
 
     def visit_Add(self, node):
-        yield (yield node.left) + (yield node.right)
+        yield (yield Visit(node.left)) + (yield Visit(node.right))
 
     def visit_Sub(self, node):
-        yield (yield node.left) - (yield node.right)
+        yield (yield Visit(node.left)) - (yield Visit(node.right))
 
     def visit_Mul(self, node):
-        yield (yield node.left) * (yield node.right)
+        yield (yield Visit(node.left)) * (yield Visit(node.right))
 
     def visit_Div(self, node):
-        yield (yield node.left) / (yield node.right)
+        yield (yield Visit(node.left)) / (yield Visit(node.right))
 
     def visit_Negate(self, node):
         yield (yield node.operand)
