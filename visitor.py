@@ -10,23 +10,15 @@ class NodeVisitor:
         while stack:
             try:
                 last = stack[-1]
-                print('before: ', stack)
                 if isinstance(last, types.GeneratorType):
-                    print('1')
-                    # stack.append(next(last))
                     stack.append(last.send(last_result))
                     last_result = None
                 elif isinstance(last, Node):
-                    print('2')
                     stack.append(self._visit(stack.pop()))
                 else:
-                    print('3')
                     last_result = stack.pop()
-
-                print('after: ', stack)
             except StopIteration:
                 stack.pop()
-            print('---------------')
 
         return last_result
 
@@ -88,15 +80,15 @@ class Evaluator(NodeVisitor):
         yield (yield node.operand)
 
 if __name__ == '__main__':
-    # t1 = Sub(Number(3), Number(4))
-    # t2 = Mul(Number(2), t1)
-    # t3 = Div(t2, Number(5))
-    # t4 = Add(Number(1), t3)
-    # e = Evaluator()
-    # print(e.visit(t4))
-    a = Number(0)
-    for n in range(1, 3):
-        a = Add(a, Number(n))
-
+    t1 = Sub(Number(3), Number(4))
+    t2 = Mul(Number(2), t1)
+    t3 = Div(t2, Number(5))
+    t4 = Add(Number(1), t3)
     e = Evaluator()
-    print(e.visit(a))
+    print(e.visit(t4))
+    # a = Number(0)
+    # for n in range(1, 2):
+    #     a = Add(a, Number(n))
+
+    # e = Evaluator()
+    # print(e.visit(a))
