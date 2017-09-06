@@ -1,0 +1,27 @@
+import numpy as np
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
+
+x = [[1], [2], [3], [4], [5], [6]]
+y = [[1], [2.1], [2.9], [4.2], [5.1], [5.8]]
+
+model = LinearRegression()
+model.fit(x, y)
+
+x2 = [[0], [2.5], [5.3], [9.1]]
+y2 = model.predict(x2)
+
+font = FontProperties()
+
+plt.figure()
+plt.title('this is title')
+plt.xlabel('x label')
+plt.ylabel('y label')
+plt.axis([0, 10, 0, 10])
+plt.grid(True)
+
+
+plt.plot(x, y, 'k.')
+plt.plot(x2, y2, 'g-')
+plt.show()
