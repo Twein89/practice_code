@@ -3,8 +3,9 @@
 int
 main()
 {
-    char word[11];
-    scanf("%s", word);
+    char word[21];
+    //gets(word);
+    scanf("%200[^\n]c", word);
     printf("%s\n", word);
     return 0;
 }
