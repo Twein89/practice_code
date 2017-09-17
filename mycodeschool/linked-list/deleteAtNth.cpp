@@ -48,6 +48,9 @@ Node* InsertNth(Node *head, int data, int n) {
 
 Node* Delete(Node *head, int n) {
     Node* temp = head;
+    if (n==1) {
+
+    }
     return head;
 }
 
