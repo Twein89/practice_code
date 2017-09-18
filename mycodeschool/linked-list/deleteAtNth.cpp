@@ -49,13 +49,12 @@ Node* InsertNth(Node *head, int data, int n) {
 Node* Delete(Node *head, int n) {
     Node* temp = head;
     if (n==1) {
-        head = head -> next;
+        head = temp -> next;
         free(temp);
-        cout<< "-----"<< head -> data <<endl;
         return head;
     }
     Node* iter = head;
-    for (int i=0; i<n-1; i++) {
+    for(int i=0; i<n-2; i++) {
         iter = iter -> next;
     }
     temp = iter -> next;
@@ -72,7 +71,7 @@ int main() {
     B = InsertNth(B, 23, 3);
     B = InsertNth(B, 110, 5);
     Print(B);
-    Delete(B, 1);
+    B = Delete(B, 1);
     Print(B);
     return 0;
 }
