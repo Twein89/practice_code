@@ -63,6 +63,23 @@ Node* Delete(Node *head, int n) {
     return head;
 }
 
+Node* DeleteNth(Node *head, int n) {
+    Node *current_node = head;
+    Node *previous_node = NULL;
+    for(int i=0; i<n; i++) {
+        previous_node = current_node;
+        current_node = current_node -> next;
+    }
+    if(n != 0) {
+        previous_node -> next = current_node -> next;
+    }
+    else {
+        head = head -> next;
+    }
+    free(current_node);
+    return head;
+}
+
 int main() {
     Node* B = new Node();
     B -> data = 5;
@@ -71,8 +88,13 @@ int main() {
     B = InsertNth(B, 23, 3);
     B = InsertNth(B, 110, 5);
     Print(B);
-    B = Delete(B, 1);
+    Node* C = B;
+    B = Delete(B, 2);
+    //B = DeleteNth(B, 2);
+    cout << "======" << endl;
     Print(B);
+    cout << "------" << endl;
+    Print(C);
     return 0;
 }
 
