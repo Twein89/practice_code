@@ -42,7 +42,10 @@ Node* InsertNth(Node *head, int data, int n) {
 Node* IterReverse(Node *head) {
     Node *prev_node = NULL;
     Node *current_node = head;
-
+    while(current_node != NULL) {
+        cout << current_node -> data <<endl;
+        current_node = current_node -> next;
+    }
     return head;
 }
 
@@ -54,6 +57,7 @@ int main() {
     B = InsertNth(B, 23, 3);
     B = InsertNth(B, 110, 5);
     Print(B);
+    IterReverse(B);
     return 0;
 }
 
