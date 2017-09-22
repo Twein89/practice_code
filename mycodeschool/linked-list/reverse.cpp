@@ -43,9 +43,13 @@ Node* IterReverse(Node *head) {
     Node *prev_node = NULL;
     Node *current_node = head;
     while(current_node != NULL) {
-        cout << current_node -> data <<endl;
-        current_node = current_node -> next;
+        //cout << current_node -> data <<endl;
+        prev_node = current_node;
+        Node *temp = current_node -> next;
+        current_node -> next = prev_node;
+        current_node = temp;
     }
+    head = prev_node;
     return head;
 }
 
@@ -57,7 +61,8 @@ int main() {
     B = InsertNth(B, 23, 3);
     B = InsertNth(B, 110, 5);
     Print(B);
-    IterReverse(B);
+    B = IterReverse(B);
+    Print(B);
     return 0;
 }
 
