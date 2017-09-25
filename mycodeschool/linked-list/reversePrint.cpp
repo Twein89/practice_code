@@ -68,7 +68,3 @@ int main() {
     ReversePrint(B);
     return 0;
 }
-
-
-
-

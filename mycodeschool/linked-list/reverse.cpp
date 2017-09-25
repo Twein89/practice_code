@@ -44,12 +44,23 @@ Node* IterReverse(Node *head) {
     Node *current_node = head;
     while(current_node != NULL) {
         //cout << current_node -> data <<endl;
-        prev_node = current_node;
         Node *temp = current_node -> next;
         current_node -> next = prev_node;
+        prev_node = current_node;
         current_node = temp;
     }
     head = prev_node;
+    return head;
+}
+
+Node* RecurReverse(Node *p) {
+    if(p->next == NULL) {
+        return p;
+    }
+    Node *head = RecurReverse(p->next);
+    Node *q = p -> next;
+    q -> next = p;
+    p -> next = NULL;
     return head;
 }
 
@@ -61,7 +72,8 @@ int main() {
     B = InsertNth(B, 23, 3);
     B = InsertNth(B, 110, 5);
     Print(B);
-    B = IterReverse(B);
+    //B = IterReverse(B);
+    B = RecurReverse(B);
     Print(B);
     return 0;
 }
