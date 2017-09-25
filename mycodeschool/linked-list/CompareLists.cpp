@@ -39,29 +39,21 @@ Node* InsertNth(Node *head, int data, int n) {
     return head;
 }
 
-Node* IterReverse(Node *head) {
-    Node *prev_node = NULL;
-    Node *current_node = head;
-    while(current_node != NULL) {
-        //cout << current_node -> data <<endl;
-        Node *temp = current_node -> next;
-        current_node -> next = prev_node;
-        prev_node = current_node;
-        current_node = temp;
+int CompareLists(Node *A, Node *B) {
+    while (A != NULL && B != NULL) {
+        if (A->data != B->data) {
+            cout << B->data << endl;
+            return 0;
+        }
+        A = A->next;
+        B = B->next;
     }
-    head = prev_node;
-    return head;
-}
-
-Node* RecurReverse(Node *p) {
-    if(p->next == NULL) {
-        return p;
+    if (A == NULL && B == NULL) {
+        return 1;
     }
-    Node *head = RecurReverse(p->next);
-    Node *q = p -> next;
-    q -> next = p;
-    p -> next = NULL;
-    return head;
+    else {
+        return 0;
+    }
 }
 
 int main() {
@@ -72,8 +64,14 @@ int main() {
     B = InsertNth(B, 23, 3);
     B = InsertNth(B, 110, 5);
     Print(B);
-    //B = IterReverse(B);
-    B = RecurReverse(B);
-    Print(B);
+    Node* C = new Node();
+    C -> data = 5;
+    C = InsertNth(B, 3, 1);
+    C = InsertNth(B, 88, 2);
+    C = InsertNth(B, 23, 3);
+    C = InsertNth(B, 111, 5);
+    int result = CompareLists(B, C);
+    cout << result << endl;
     return 0;
 }
+
