@@ -39,8 +39,21 @@ Node* InsertNth(Node *head, int data, int n) {
     return head;
 }
 
-Node* MergeLists(Node *A, Node *B) {
-    return A;
+int CompareLists(Node *A, Node *B) {
+    while (A != NULL && B != NULL) {
+        if (A->data != B->data) {
+            cout << B->data << endl;
+            return 0;
+        }
+        A = A->next;
+        B = B->next;
+    }
+    if (A == NULL && B == NULL) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 int main() {
@@ -57,6 +70,8 @@ int main() {
     C = InsertNth(B, 88, 2);
     C = InsertNth(B, 23, 3);
     C = InsertNth(B, 111, 5);
+    int result = CompareLists(B, C);
+    cout << result << endl;
     return 0;
 }
 
