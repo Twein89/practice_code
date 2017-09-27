@@ -39,39 +39,43 @@ Node* InsertNth(Node *head, int data, int n) {
     return head;
 }
 
-int CompareLists(Node *A, Node *B) {
-    while (A != NULL && B != NULL) {
-        if (A->data != B->data) {
-            cout << B->data << endl;
-            return 0;
-        }
-        A = A->next;
-        B = B->next;
-    }
+Node* MergeLists(Node *A, Node *B) {
     if (A == NULL && B == NULL) {
-        return 1;
+        return NULL;
+    }
+    else if (A != NULL && B == NULL) {
+        return A;
+    }
+    else if (A == NULL && B != NULL) {
+        return B;
+    }
+    else if (A -> data <= B -> data) {
+        A -> next = MergeLists(A -> next, B);
+        return A;
     }
     else {
-        return 0;
+        B -> next = MergeLists(A, B -> next);
+        return B;
     }
 }
 
 int main() {
     Node* B = new Node();
-    B -> data = 5;
-    B = InsertNth(B, 3, 1);
-    B = InsertNth(B, 88, 2);
-    B = InsertNth(B, 23, 3);
+    B -> data = 2;
+    B = InsertNth(B, 9, 2);
+    B = InsertNth(B, 30, 3);
+    B = InsertNth(B, 60, 4);
     B = InsertNth(B, 110, 5);
-    Print(B);
+    //Print(B);
     Node* C = new Node();
     C -> data = 5;
-    C = InsertNth(B, 3, 1);
-    C = InsertNth(B, 88, 2);
-    C = InsertNth(B, 23, 3);
-    C = InsertNth(B, 111, 5);
-    int result = CompareLists(B, C);
-    cout << result << endl;
+    C = InsertNth(C, 7, 2);
+    C = InsertNth(C, 25, 3);
+    C = InsertNth(C, 50, 4);
+    C = InsertNth(C, 70, 5);
+    //Print(C);
+    Node *M = MergeLists(B, C);
+    Print(M);
     return 0;
 }
 
