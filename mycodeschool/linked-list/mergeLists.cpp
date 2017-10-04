@@ -73,7 +73,6 @@ int main() {
     C = InsertNth(C, 25, 3);
     C = InsertNth(C, 50, 4);
     C = InsertNth(C, 70, 5);
-    //Print(C);
     Node *M = MergeLists(B, C);
     Print(M);
     return 0;
