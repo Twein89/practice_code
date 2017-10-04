@@ -15,6 +15,7 @@ int main() {
     // Node* temp = (Node*)malloc(sizeof(Node));
     Node* temp = new Node();
     // (*temp).data = 2;
+    //
     // (*temp).link = NULL;
     temp -> data = 2;
     temp -> link = NULL;
