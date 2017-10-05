@@ -39,16 +39,7 @@ Node* InsertNth(Node *head, int data, int n) {
     return head;
 }
 
-int HasLoop(Node* head) {
-    Node* fast_ptr = head;
-    Node* slow_ptr = head;
-    while(fast_ptr->next != NULL && fast_ptr->next->next != NULL) {
-        fast_ptr = fast_ptr->next->next;
-        slow_ptr = slow_ptr->next;
-        if(fast_ptr == slow_ptr) {
-            return 1;
-        }
-    }
+int FindMergePoint(Node *A, Node *B) {
     return 0;
 }
 
@@ -59,15 +50,7 @@ int main() {
     B = InsertNth(B, 30, 3);
     B = InsertNth(B, 30, 4);
     B = InsertNth(B, 110, 5);
-    Node* k = new Node();
-    k -> data = 666;
-    cout << B->next->next->data << endl;
-    B->next->next->next = k;
-    k->next = B->next;
-    //Print(B);
-    //Print(B);
-    int r = HasLoop(B);
-    cout << r << endl;
+    Print(B);
     return 0;
 }
 
