@@ -39,18 +39,50 @@ Node* InsertNth(Node *head, int data, int n) {
     return head;
 }
 
+int length(Node *head) {
+    int len = 0;
+    while(head != NULL) {
+        len++;
+        head = head->next;
+    }
+    return len;
+}
+
 int FindMergePoint(Node *A, Node *B) {
+    int m = length(A);
+    int n = length(B);
+    for(int i=0; i < m; i++) {
+        A = A -> next;
+        for(int j=0; j < n; j++) {
+            B = B -> next;
+            if (A == B) {
+                return A -> data;
+            }
+        }
+    }
+
     return 0;
 }
 
 int main() {
+    Node* C = new Node();
+    C -> data = 7;
+    C = InsertNth(C, 1, 2);
+    Node* A = new Node();
+    A -> data = 6;
+    A -> next = C;
+    A = InsertNth(A, 4, 1);
+    Print(A);
+    cout << "---------" << endl;
     Node* B = new Node();
-    B -> data = 2;
-    B = InsertNth(B, 9, 2);
-    B = InsertNth(B, 30, 3);
-    B = InsertNth(B, 30, 4);
-    B = InsertNth(B, 110, 5);
+    B -> data = 5;
+    B -> next = C;
+    B = InsertNth(B, 3, 1);
+    B = InsertNth(B, 9, 1);
     Print(B);
+    cout << "========" << endl;
+    int r = FindMergePoint(A, B);
+    cout << r << endl;
     return 0;
 }
 
