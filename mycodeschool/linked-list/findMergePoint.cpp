@@ -51,14 +51,16 @@ int length(Node *head) {
 int FindMergePoint(Node *A, Node *B) {
     int m = length(A);
     int n = length(B);
+    Node *headB = B;
     for(int i=0; i < m; i++) {
-        A = A -> next;
+        B = headB;
         for(int j=0; j < n; j++) {
-            B = B -> next;
             if (A == B) {
                 return A -> data;
             }
+            B = B -> next;
         }
+        A = A -> next;
     }
 
     return 0;
