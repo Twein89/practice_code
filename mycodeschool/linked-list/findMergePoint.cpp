@@ -1,4 +1,5 @@
 #include<iostream>
+#include<set>
 
 using namespace std;
 
@@ -48,21 +49,44 @@ int length(Node *head) {
     return len;
 }
 
+//int FindMergePoint(Node *A, Node *B) {
+//    int m = length(A);
+//    int n = length(B);
+//    Node *headB = B;
+//    for(int i=0; i < m; i++) {
+//        B = headB;
+//        for(int j=0; j < n; j++) {
+//            if (A == B) {
+//                return A -> data;
+//            }
+//            B = B -> next;
+//        }
+//        A = A -> next;
+//    }
+//
+//    return 0;
+//}
+
 int FindMergePoint(Node *A, Node *B) {
-    int m = length(A);
+    set<Node *> addresses;
     int n = length(B);
-    Node *headB = B;
-    for(int i=0; i < m; i++) {
-        B = headB;
-        for(int j=0; j < n; j++) {
-            if (A == B) {
-                return A -> data;
-            }
-            B = B -> next;
-        }
-        A = A -> next;
+    int m = length(A);
+
+    for(int i=0; i < n; i++) {
+        addresses.insert(B);
+        B = B -> next;
     }
 
+    //for(auto it = addresses.begin(); it != addresses.end(); ++it)
+    //    cout << *it << endl;
+
+    for(int i=0; i < m; i++) {
+        if(addresses.find(A) != addresses.end()) {
+            return A -> data;
+        }
+        //cout << *addresses.find(A) << "~~~~~" << *addresses.end() << endl; 
+        A = A -> next;
+    }
     return 0;
 }
 
@@ -74,18 +98,16 @@ int main() {
     A -> data = 6;
     A -> next = C;
     A = InsertNth(A, 4, 1);
-    Print(A);
-    cout << "---------" << endl;
     Node* B = new Node();
     B -> data = 5;
     B -> next = C;
     B = InsertNth(B, 3, 1);
     B = InsertNth(B, 9, 1);
-    Print(B);
-    cout << "========" << endl;
+    //Print(A);
+    //cout << "---------" << endl;
+    //Print(B);
+    //cout << "========" << endl;
     int r = FindMergePoint(A, B);
     cout << r << endl;
     return 0;
 }
-
-
