@@ -67,29 +67,56 @@ int length(Node *head) {
 //    return 0;
 //}
 
+//nlog(n)
+//int FindMergePoint(Node *A, Node *B) {
+//    set<Node *> addresses;
+//    int n = length(B);
+//    int m = length(A);
+//
+//    for(int i=0; i < n; i++) {
+//        addresses.insert(B);
+//        B = B -> next;
+//    }
+//
+//    //for(auto it = addresses.begin(); it != addresses.end(); ++it)
+//    //    cout << *it << endl;
+//
+//    for(int i=0; i < m; i++) {
+//        if(addresses.find(A) != addresses.end()) {
+//            return A -> data;
+//        }
+//        //cout << *addresses.find(A) << "~~~~~" << *addresses.end() << endl; 
+//        A = A -> next;
+//    }
+//    return 0;
+//}
+
 int FindMergePoint(Node *A, Node *B) {
-    set<Node *> addresses;
-    int n = length(B);
     int m = length(A);
-
-    for(int i=0; i < n; i++) {
-        addresses.insert(B);
-        B = B -> next;
+    int n = length(B);
+    if(m > n) {
+        Node *temp = A;
+        A = B;
+        B = temp;
     }
-
-    //for(auto it = addresses.begin(); it != addresses.end(); ++it)
-    //    cout << *it << endl;
-
-    for(int i=0; i < m; i++) {
-        if(addresses.find(A) != addresses.end()) {
-            return A -> data;
-        }
-        //cout << *addresses.find(A) << "~~~~~" << *addresses.end() << endl; 
-        A = A -> next;
+    int d = n - m;
+    for(int i=0; i < d; i++) {
+        B = B->next;
     }
-    return 0;
+    //while(A != NULL && B != NULL) {
+    //    if(A == B) {
+    //        return A->data;
+    //    }
+    //    A = A->next;
+    //    B = B->next;
+    //}
+    while(A != B) {
+        A = A->next;
+        B = B->next;
+    }
+    //return -1;
+    return A->data;
 }
-
 int main() {
     Node* C = new Node();
     C -> data = 7;
@@ -103,10 +130,10 @@ int main() {
     B -> next = C;
     B = InsertNth(B, 3, 1);
     B = InsertNth(B, 9, 1);
-    //Print(A);
-    //cout << "---------" << endl;
-    //Print(B);
-    //cout << "========" << endl;
+    Print(A);
+    cout << "---------" << endl;
+    Print(B);
+    cout << "========" << endl;
     int r = FindMergePoint(A, B);
     cout << r << endl;
     return 0;
