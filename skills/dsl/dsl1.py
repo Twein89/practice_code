@@ -5,7 +5,7 @@ if len(sys.argv) !=2 :
     print('usage: %s <src.dsl>' % sys.argv[0])
     sys.exit(1)
 
-sys.path.insert(0, '/Users/tweinyan/myproject/practice_code/skills/modules/')
+sys.path.insert(0, '/Users/tweinyan/myproject/practice_code/skills/dsl/modules/')
 
 with open(sys.argv[1], 'r') as file:
     for line in file:
@@ -17,3 +17,5 @@ with open(sys.argv[1], 'r') as file:
 
         mod = importlib.import_module(parts[0])
         print(mod)
+
+getattr(mod, parts[1])(parts[2], parts[3])
