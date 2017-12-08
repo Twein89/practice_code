@@ -63,4 +63,4 @@ def get_movie(title):
             "cast": [dict(zip(("name", "job", "role"), member)) for member in row["cast"]]}
 
 if __name__ == "__main__":
-    run(port=8080)
+    run(host='0.0.0.0', port=8080)
