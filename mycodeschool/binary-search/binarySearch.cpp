@@ -5,8 +5,9 @@ using namespace std;
 
 int BinarySearch(int A[],int n,int x) {
     int low = 0, high = n -1;
-    int mid = (low + high) / 2;
+    int mid = 0;
     while(low <= high) {
+        mid = (low + high) / 2;
         if(x == A[mid]) return mid;
         else if(x <= A[mid]) high = mid - 1;
         else low = mid + 1;
