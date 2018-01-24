@@ -9,14 +9,17 @@ class Solution:
     def sumOfLeftLeaves(self, root):
         if not root:
             return 0
-        elif not root.left and not root.right:
-            print(root.val)
-            return root.val
-        elif not root.left.left and root.left.right:
-            print(root.left.val)
-            return root.left.val
+        elif root.left and not root.left.left and not root.left.right:
+            return root.left.val + self.sumOfLeftLeaves(root.right)
         else:
             return self.sumOfLeftLeaves(root.left) + self.sumOfLeftLeaves(root.right)
+        #if not root:
+        #    return 0
+        #elif not root.left and not root.right:
+        #    return self.sumOfLeftLeaves(root.left)
+        #elif not root.left.left and root.left.right:
+        #    return root.left.val
+        #return self.sumOfLeftLeaves(root.left) + self.sumOfLeftLeaves(root.right)
 
         #if not root:
         #    return 0
