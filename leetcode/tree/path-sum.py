@@ -20,7 +20,6 @@ class Solution:
         return False
 
 
-
 if __name__ == '__main__':
     n0 = TreeNode(5)
     n1 = TreeNode(4)
