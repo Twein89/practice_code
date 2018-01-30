@@ -6,23 +6,18 @@ class TreeNode:
 
 class Solution:
     def hasPathSum(self, root, sum):
-        pass
-    def travel(self, root):
         if root is None:
-            return []
-        result, current = [], [root]
-        while current:
-            vals, next_level = [], []
-            for node in current:
-                vals.append(node.val)
-                if node.left is not None:
-                    next_level.append(node.left)
-                if node.right is not None:
-                    next_level.append(node.right)
-            current = next_level
-            print(vals)
-
-
+            return False
+        stack = [(root, sum)]
+        while stack:
+            node, val = stack.pop()
+            if not node.left and not node.right and node.val == val:
+                return True
+            if node.right is not None:
+                stack.append((node.right, val - node.val))
+            if node.left is not None:
+                stack.append((node.left, val - node.val))
+        return False
 
 
 
@@ -45,4 +40,4 @@ if __name__ == '__main__':
     n3.right = n7
     n5.right = n8
     s = Solution()
-    s.travel(n0)
+    print(s.hasPathSum(n0, 23))
