@@ -1,22 +1,17 @@
-class A(object):
-    def foo(self, x):
-        print "executing foo(%s,%s)" % (self, x)
+class A():
+    def foo1(self):
+        print "A"
 
-    @classmethod
-    def class_foo(cls, x):
-        print "executing class_foo(%s,%s)" % (cls, x)
+class B(A):
+    def foo2(self):
+        print "B"
 
-    @staticmethod
-    def static_foo(x):
-        print "executing static_foo(%s)" % x
+class C(A):
+    def foo3(self):
+        print "C"
 
-a = A()
-a.foo(1)
-a.class_foo(1)
-A.class_foo(1)
-a.static_foo(1)
-A.static_foo("hi")
+class D(B, C):
+    pass
 
-print(a.class_foo)
-print(a.static_foo)
-print(A.static_foo)
+d = D()
+d.foo1()
