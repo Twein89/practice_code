@@ -1,0 +1,9 @@
+hadoop fs -ls /user/hive/warehouse/twein_test.db/test
+
+hadoop fs -put user.txt /user/hive/warehouse/twein_test.db/test
+
+导入数据
+1.从文本文件加载数据
+(1)load data local inpath '/tmp/user.txt' into table test;
+2.从hive另一个表
+3.从关系型数据库导入(mysql)

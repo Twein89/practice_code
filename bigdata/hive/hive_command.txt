@@ -1,0 +1,3 @@
+hadoop fs -ls /user/hive/warehouse/twein_test.db/test
+
+hadoop fs -put user.txt /user/hive/warehouse/twein_test.db/test
